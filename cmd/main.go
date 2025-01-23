@@ -2,7 +2,6 @@ package main
 
 import (
 	"address-crud-1/config"
-	"address-crud-1/internal/database"
 	"address-crud-1/internal/server"
 )
 
@@ -11,10 +10,10 @@ func main() {
 		panic(err)
 	}
 
-	db := database.Connect()
-	defer db.Close()
+	// db := database.Connect()
+	// defer db.Close()
 
-	database.Migrate(db)
+	// database.Migrate(db)
 
 	s := server.Init()
 	s.Run()
