@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
 
 type Env struct {
 	DBHost     string `mapstructure:"DB_HOST"`
@@ -18,6 +22,7 @@ var Config Env
 
 func Load() error {
 	viper.AddConfigPath("../")
+	viper.AddConfigPath(".")
 	viper.SetConfigType("env")
 	viper.SetConfigName(".env")
 
@@ -28,6 +33,9 @@ func Load() error {
 	if err := viper.Unmarshal(&Config); err != nil {
 		return err
 	}
+
+	logger := log.Default()
+	logger.Print(&Config)
 
 	return nil
 }

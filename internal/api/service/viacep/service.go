@@ -20,7 +20,7 @@ func NewViaCepService() *ViaCepService {
 }
 
 func (v *ViaCepService) GetAddressByZipCode(zipCode string) (*ViaCepResponse, error) {
-	url := strings.Replace(config.Config.VIACEPURL, "$cep", zipCode, 1)
+	url := strings.Replace(config.Config.VIACEPURL, "$$cep", zipCode, 1)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
