@@ -19,5 +19,26 @@ spec:
           limits:
             memory: "32Mi"
             cpu: "100m"
+        startupProbe:
+          httpGet:
+            path: /v1/healthcheck
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 15
+        readinessProbe:
+          httpGet:
+            path: /v1/healthcheck
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 2
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /v1/healthcheck
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          timeoutSeconds: 5
         ports:
         - containerPort: 8080
