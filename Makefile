@@ -35,3 +35,6 @@ kubectl port-forward svc/serversvc 8080:8080
 
 #describe pod
 kubectl describe pod server-7fd9c997d7-9qjs2
+
+#SVC type: default = port forward
+#SVC type: type: LoadBalancer = create an external IP for your pod
