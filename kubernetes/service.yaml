@@ -3,8 +3,9 @@ kind: Service
 metadata:
   name: serversvc
 spec:
+  type: LoadBalancer
   selector:
     app: server
   ports:
-  - port: 8080
+  - port: 80
     targetPort: 8080

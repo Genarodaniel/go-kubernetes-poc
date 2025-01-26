@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: server
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: server
@@ -17,8 +17,8 @@ spec:
         image: danielsgenaro/address-crud-1:latest
         resources:
           limits:
-            memory: "32Mi"
-            cpu: "100m"
+            memory: "16Mi"
+            cpu: "0.5"
         startupProbe:
           httpGet:
             path: /v1/healthcheck
