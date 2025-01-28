@@ -106,3 +106,7 @@ kubectl get service/serversvc |  awk {'print $1" " $2 " " $4 " " $5'} | column -
 kubectl describe ingress address-ingress -n default
 
 kubectl port-forward svc/serversvc 8080:8080 -n default
+
+kubectl get services
+kubectl get pods
+curl http://a34f12272b6524c3081f4a7e6e399069-1585435299.us-east-1.elb.amazonaws.com/v1/address/14403055
