@@ -1,14 +1,15 @@
 package server
 
 import (
-	"address-crud-1/config"
 	"address-crud-1/internal/api"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Init() *gin.Engine {
-	gin.SetMode(config.Config.GinMode)
+
+	//update with config env value
+	gin.SetMode(gin.DebugMode)
 	router := gin.New()
 	router.Use(gin.LoggerWithWriter(gin.DefaultWriter))
 	router.Use(gin.Recovery())

@@ -34,12 +34,12 @@ kubectl apply -f kubernetes/service.yaml
 kubectl port-forward svc/serversvc 8080:8080
 
 #describe pod
-kubectl describe pod server-7fd9c997d7-9qjs2
+kubectl describe pod server-7564b5856f-2c2h9
 
 #describe ingress
 
 kubectl describe ingress address-ingress
-
+kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:latest
 
 #SVC type: default = port forward
 #SVC type: type: LoadBalancer = create an external IP for your pod
@@ -110,3 +110,5 @@ kubectl port-forward svc/serversvc 8080:8080 -n default
 kubectl get services
 kubectl get pods
 curl http://a34f12272b6524c3081f4a7e6e399069-1585435299.us-east-1.elb.amazonaws.com/v1/address/14403055
+
+docker pull 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:latest
