@@ -110,3 +110,32 @@ module "irsa-ebs-csi" {
   role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
 }
+
+resource "aws_iam_user" "github" {
+  name = "GithubCICD"
+}
+
+
+data "aws_iam_policy_document" "github_cicd_policy" {
+  statement {
+    actions   = ["ecr:GetAuthorizationToken", "ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer", "ecr:DescribeImages"]
+    resources = ["*"]
+    effect = "Allow"
+  }
+  statement {
+    actions   = ["eks:DescribeCluster","eks:ListClusters","eks:UpdateClusterConfig","eks:*"]
+    resources = ["*"]
+    effect = "Allow"
+  }
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "github_cicd-policy"
+  description = "Policy to github cicd"
+  policy = data.aws_iam_policy_document.github_cicd_policy.json
+}
+
+resource "aws_iam_user_policy_attachment" "attachment" {
+  user       = aws_iam_user.github.name
+  policy_arn = aws_iam_policy.policy.arn
+}
