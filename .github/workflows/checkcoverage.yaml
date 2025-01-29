@@ -1,0 +1,42 @@
+name: Test and Coverage
+
+on:
+  push:
+    branches:
+    - '**'
+  pull_request:
+    branches: [main]
+
+env:
+  GO_MODULES_CACHE: ${{ steps.goto-checkout.outputs.linux-go-modules-cache }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        id: checkout
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.20"
+          cache: ${{ env.GO_MODULES_CACHE }}
+
+      - name: Install dependencies
+        run: |
+          go mod download
+
+      - name: Run tests with coverage
+        id: test-coverage
+        run: |
+          go test -coverprofile=coverage.out ./...
+          go tool cover -func=coverage.out
+        continue-on-error: true
+
+      - name: Check coverage percentage
+        run: |
+          coverage=$(go tool cover -func=coverage.out | awk '{print $3}' | sed 's/%//g')
+          if (( $(echo "$coverage < 40" | bc -l) )); then
+            exit 1
+          fi
