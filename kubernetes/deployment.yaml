@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: danielsgenaro/address-crud-1:latest
+        image: 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:latest
         resources:
           limits:
             memory: "16Mi"

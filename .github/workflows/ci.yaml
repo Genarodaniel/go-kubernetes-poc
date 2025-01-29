@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code at tag
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Set up Go environment
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.23.4'
+
+      - name: Build the Golang binary
+        run: |
+          cd cmd/yourapp
+          GOARCH=amd64 GOOS=linux go build -o ../bin/app
+
+      - name: Log in to the Amazon ECR registry
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry: 536697241595.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build and push Docker image
+        run: |
+          TAG=${{ github.ref_name }}
+          echo "Building image with tag ${TAG}"
+          docker build --build-arg BUILD_VERSION=${TAG} -t 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:${TAG} .
+          docker tag danielsgenaro/address-crud-1:${TAG} 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:${TAG}
+          docker push 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:${TAG}
