@@ -118,7 +118,15 @@ resource "aws_iam_user" "github" {
 
 data "aws_iam_policy_document" "github_cicd_policy" {
   statement {
-    actions   = ["ecr:GetAuthorizationToken", "ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer", "ecr:DescribeImages","ecr:InitiateLayerUpload","ecr:PutImage", "ecr:UploadLayerPart", "ecr:CompleteLayerUpload"]
+    actions   = ["ecr:GetAuthorizationToken", 
+    "ecr:BatchGetImage", 
+    "ecr:GetDownloadUrlForLayer", 
+    "ecr:DescribeImages",
+    "ecr:InitiateLayerUpload",
+    "ecr:PutImage",
+    "ecr:UploadLayerPart",
+    "ecr:CompleteLayerUpload",
+    "ecr:BatchCheckLayerAvailability"]
     resources = ["*"]
     effect = "Allow"
   }
