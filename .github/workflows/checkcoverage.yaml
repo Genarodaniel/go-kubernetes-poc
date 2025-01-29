@@ -47,6 +47,7 @@ jobs:
 
           # Debugging: Print extracted value
           echo "Extracted Coverage: $coverage%"
+          echo "Minimum Coverage: $minimum_coverage%"
 
           # Validate coverage and enforce minimum threshold
           if (( $(echo "$coverage < $minimum_coverage" | bc) )); then
