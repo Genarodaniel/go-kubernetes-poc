@@ -33,7 +33,22 @@ jobs:
 
       - name: Check coverage percentage
         run: |
-          coverage=$(go tool cover -func=coverage.out | awk '{print $3}' | sed 's/%//g')
-          if (( $(echo "$coverage < 40" | bc -l) )); then
+          # Ensure coverage file exists
+          if [[ ! -f coverage.out ]]; then
+            echo "Error: coverage.out not found"
             exit 1
           fi
+
+          # Extract coverage percentage
+          coverage=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | tr -d '%')
+
+          # Debugging: Print extracted value
+          echo "Extracted Coverage: $coverage%"
+
+          # Validate coverage and enforce minimum threshold
+          if (( $(echo "$coverage < 40" | bc) )); then
+            echo "Coverage is below 40% ($coverage%), failing..."
+            exit 1
+          fi
+
+          echo "Coverage is sufficient ($coverage%)"
