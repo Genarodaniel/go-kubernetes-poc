@@ -7,8 +7,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  GO_MODULES_CACHE: ${{ steps.goto-checkout.outputs.linux-go-modules-cache }}
 
 jobs:
   test:
@@ -20,8 +18,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: "1.20"
-          cache: ${{ env.GO_MODULES_CACHE }}
+          go-version: "1.23.4"
 
       - name: Install dependencies
         run: |
