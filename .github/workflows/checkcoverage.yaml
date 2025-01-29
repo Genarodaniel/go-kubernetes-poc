@@ -42,12 +42,15 @@ jobs:
           # Extract coverage percentage
           coverage=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | tr -d '%')
 
+          # Set minimum coverage from repository var
+          minimum_coverage=${{ vars.MINIMUM_COVERAGE }}
+
           # Debugging: Print extracted value
           echo "Extracted Coverage: $coverage%"
 
           # Validate coverage and enforce minimum threshold
-          if (( $(echo "$coverage < 40" | bc) )); then
-            echo "Coverage is below 40% ($coverage%), failing..."
+          if (( $(echo "$coverage < $minimum_coverage" | bc) )); then
+            echo "Coverage is below $minimum_coverage% ($coverage%), failing..."
             exit 1
           fi
 
