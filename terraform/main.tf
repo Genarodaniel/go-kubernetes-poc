@@ -121,3 +121,18 @@ resource "aws_iam_user_policy_attachment" "attachment" {
   user       = aws_iam_user.github.name
   policy_arn = aws_iam_policy.policy.arn
 }
+
+resource "awscc_eks_access_entry" "githubCICD" {
+  cluster_name    = local.cluster_name
+  principal_arn     = aws_iam_user.github.arn
+  type              = "STANDARD"
+  access_policies = [
+    {
+      access_scope = {
+        type       = "namespace"
+        namespaces = ["default"]
+      }
+      policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+    }
+  ]
+}
