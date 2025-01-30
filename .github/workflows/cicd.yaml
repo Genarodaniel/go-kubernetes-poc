@@ -98,4 +98,6 @@ jobs:
       - uses: tale/kubectl-action@v1
         with:
           base64-kube-config: ${{ env.EKS_CREDS }}
-      - run: kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
+      - run: |
+          TAG=${{ github.ref_name }}
+          kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
