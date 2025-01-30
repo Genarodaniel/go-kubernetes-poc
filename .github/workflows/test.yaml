@@ -29,7 +29,9 @@ jobs:
         run: |
           go test -coverprofile=coverage.out ./...
           go tool cover -func=coverage.out
-        continue-on-error: true
+
+      - name: Build
+        run: go build -v ./...
 
       - name: Check coverage percentage
         run: |
