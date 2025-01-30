@@ -11,6 +11,41 @@ For local development and testing, we recommend using:
 - [Docker Compose](https://docs.docker.com/compose/)
 - [kind](https://kind.sigs.k8s.io/) (Kubernetes in Docker)
 
+## CI/CD Configuration
+
+### Environment Variables and Secrets
+To configure the CI/CD pipeline for this project, you need to set up the following environment variables and secrets in your repository:
+
+#### Secrets
+- `AWS_ACCESS_KEY_ID`: AWS access key ID with sufficient permissions.
+- `AWS_SECRET_ACCESS_KEY`: AWS secret access key corresponding to the above ID.
+
+In the ### Terraform Setup sections is going to be created an user with the needed permissions. 
+
+#### Variables
+- `AWS_REGION`: The AWS region where resources will be deployed (e.g., `us-east-1`).
+- `IMAGE_REGISTRY`: The Docker registry to use for storing images (e.g., `536697241595.dkr.ecr.us-east-1.amazonaws.com` or `docker.io`).
+- `IMAGE_NAME`: The name of the Docker image (e.g., `danielsgenaro/go-kubernetes-poc`).
+- `MINIMUM_COVERAGE`: Minimum test coverage percentage required to pass CI checks (default: `35`).
+
+These variables should be added as repository secrets or configured in your CI/CD provider (e.g., GitHub Actions, GitLab CI).
+
+### CI/CD Process
+
+The CI/CD pipeline is designed to automate testing, building, and deployment of the application.
+
+1. **On Push/Pull Request**:
+   - Run unit tests.
+   - Check code coverage (minimum `MINIMUM_COVERAGE`).
+
+2. **On Tagged Release**:
+   - Deploy application to AWS EKS cluster.
+   - Update deployment configuration with new version.
+
+3. **Post-Deployment**:
+   - Verify application health in the production environment.
+   - Rollback or trigger notifications based on success/failure.
+
 ## Local Deployment
 
 ### Using Docker Compose
