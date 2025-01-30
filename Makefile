@@ -11,6 +11,8 @@ docker tag danielsgenaro/go-kubernetes-poc:latest 536697241595.dkr.ecr.us-east-1
 
 docker push 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:latest
 
+aws eks --region us-east-1 update-kubeconfig --name go-kubernetes-poc-eks
+
 #to delete the cluster
 kind delete cluster --name=go-kubernetes-poc
 
