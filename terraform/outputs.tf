@@ -17,3 +17,7 @@ output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = module.eks.cluster_name
 }
+
+output "rendered_policy" {
+  value = data.aws_iam_policy_document.github_cicd_policy.json
+}

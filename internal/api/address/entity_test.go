@@ -1,7 +1,7 @@
 package address_test
 
 import (
-	"address-crud-1/internal/api/address"
+	"go-kubernetes-poc/internal/api/address"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

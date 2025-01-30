@@ -1,14 +1,13 @@
 package main
 
 import (
-	"address-crud-1/config"
-	"address-crud-1/internal/server"
+	"go-kubernetes-poc/internal/server"
 )
 
 func main() {
-	if err := config.Load(); err != nil {
-		panic(err)
-	}
+	// if err := config.Load(); err != nil {
+	// 	panic(err)
+	// }
 
 	// db := database.Connect()
 	// defer db.Close()

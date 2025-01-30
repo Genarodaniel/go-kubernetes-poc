@@ -1,8 +1,8 @@
 package viacep
 
 import (
-	"address-crud-1/config"
 	"encoding/json"
+	"go-kubernetes-poc/config"
 	"io"
 	"net/http"
 	"strings"

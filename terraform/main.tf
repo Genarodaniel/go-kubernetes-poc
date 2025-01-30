@@ -14,19 +14,15 @@ data "aws_availability_zones" "available" {
 }
 
 locals {
-  cluster_name = "address-crud-1-eks-${random_string.suffix.result}"
+  cluster_name = "go-kubernetes-poc-eks"
 }
 
-resource "random_string" "suffix" {
-  length  = 8
-  special = false
-}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.8.1"
 
-  name = "address-crud-1-vpc"
+  name = "go-kubernetes-poc-vpc"
 
   cidr = "10.0.0.0/16"
   azs  = slice(data.aws_availability_zones.available.names, 0, 3)
@@ -52,16 +48,10 @@ module "eks" {
   version = "20.8.5"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.29"
+  cluster_version = "1.31"
 
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
-
-  cluster_addons = {
-    aws-ebs-csi-driver = {
-      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-    }
-  }
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
@@ -95,18 +85,54 @@ module "eks" {
 }
 
 
-# https://aws.amazon.com/blogs/containers/amazon-ebs-csi-driver-is-now-generally-available-in-amazon-eks-add-ons/
-data "aws_iam_policy" "ebs_csi_policy" {
-  arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+resource "aws_iam_user" "github" {
+  name = "GithubCICD"
 }
 
-module "irsa-ebs-csi" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.39.0"
 
-  create_role                   = true
-  role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
-  provider_url                  = module.eks.oidc_provider
-  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+data "aws_iam_policy_document" "github_cicd_policy" {
+  statement {
+    actions   = ["ecr:GetAuthorizationToken",
+    "ecr:BatchGetImage",
+    "ecr:GetDownloadUrlForLayer",
+    "ecr:DescribeImages",
+    "ecr:InitiateLayerUpload",
+    "ecr:PutImage",
+    "ecr:UploadLayerPart",
+    "ecr:CompleteLayerUpload",
+    "ecr:BatchCheckLayerAvailability"]
+    resources = ["*"]
+    effect = "Allow"
+  }
+  statement {
+    actions   = ["eks:DescribeCluster","eks:ListClusters","eks:UpdateClusterConfig","eks:*"]
+    resources = ["*"]
+    effect = "Allow"
+  }
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "github_cicd-policy"
+  description = "Policy to github cicd"
+  policy = data.aws_iam_policy_document.github_cicd_policy.json
+}
+
+resource "aws_iam_user_policy_attachment" "attachment" {
+  user       = aws_iam_user.github.name
+  policy_arn = aws_iam_policy.policy.arn
+}
+
+resource "awscc_eks_access_entry" "githubCICD" {
+  cluster_name    = local.cluster_name
+  principal_arn     = aws_iam_user.github.arn
+  type              = "STANDARD"
+  access_policies = [
+    {
+      access_scope = {
+        type       = "namespace"
+        namespaces = ["default"]
+      }
+      policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+    }
+  ]
 }

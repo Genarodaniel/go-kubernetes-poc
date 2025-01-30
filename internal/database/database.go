@@ -1,9 +1,9 @@
 package database
 
 import (
-	"address-crud-1/config"
 	"database/sql"
 	"fmt"
+	"go-kubernetes-poc/config"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
