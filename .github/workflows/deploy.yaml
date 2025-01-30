@@ -20,6 +20,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Deploy to EKS using kubectl
+      - name: Generate kubeconfig and Deploy to EKS using kubectl
         run: |
-          kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${tag}
+          {
+              echo 'EKS_CREDS<<EOF'
+              aws eks --region us-east-1 update-kubeconfig --name go-kubernetes-poc-eks --dry-run | base64
+              echo EOF
+          } >> $GITHUB_ENV
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ env.EKS_CREDS }}
+      - run: |
+          TAG=${{ github.ref_name }}
+          kubectl set image deployment/server server=${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}

@@ -85,8 +85,8 @@ jobs:
         run: |
           TAG=${{ github.ref_name }}
           echo "Building image with tag ${TAG}"
-          docker build --build-arg BUILD_VERSION=${TAG} -t 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG} .
-          docker push 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
+          docker build --build-arg BUILD_VERSION=${TAG} -t ${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}:${TAG} .
+          docker push ${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}:${TAG}
 
       - name: Generate kubeconfig and Deploy to EKS using kubectl
         run: |
@@ -100,4 +100,4 @@ jobs:
           base64-kube-config: ${{ env.EKS_CREDS }}
       - run: |
           TAG=${{ github.ref_name }}
-          kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
+          kubectl set image deployment/server server=${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}
