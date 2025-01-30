@@ -6,10 +6,6 @@ on:
         description: 'ECR Image Tag'
         required: true
 
-env:
-  REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-  IMAGE_NAME: ${{ steps.meta.name }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
