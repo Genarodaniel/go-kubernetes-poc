@@ -92,5 +92,5 @@ jobs:
         run: |
           curl -LO "https://dl.k8s.io/release/v1.23.6/bin/linux/amd64/kubectl"
           chmod 755 kubectl
-          aws eks--region us-east-1 update-kubeconfig --name go-kubernetes-poc-eks
+          aws eks --region us-east-1 update-kubeconfig --name go-kubernetes-poc-eks
           ./kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
