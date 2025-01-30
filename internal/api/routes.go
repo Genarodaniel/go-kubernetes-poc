@@ -1,7 +1,7 @@
 package api
 
 import (
-	"address-crud-1/internal/api/healthcheck"
+	"go-kubernetes-poc/internal/api/healthcheck"
 
 	"github.com/gin-gonic/gin"
 )

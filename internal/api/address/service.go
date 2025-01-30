@@ -1,7 +1,7 @@
 package address
 
 import (
-	"address-crud-1/internal/api/service/viacep"
+	"go-kubernetes-poc/internal/api/service/viacep"
 )
 
 type AddressServiceInterface interface {

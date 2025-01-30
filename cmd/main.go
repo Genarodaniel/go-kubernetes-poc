@@ -1,7 +1,7 @@
 package main
 
 import (
-	"address-crud-1/internal/server"
+	"go-kubernetes-poc/internal/server"
 )
 
 func main() {

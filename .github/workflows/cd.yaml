@@ -85,5 +85,5 @@ jobs:
         run: |
           TAG=${{ github.ref_name }}
           echo "Building image with tag ${TAG}"
-          docker build --build-arg BUILD_VERSION=${TAG} -t 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:${TAG} .
-          docker push 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/address-crud-1:${TAG}
+          docker build --build-arg BUILD_VERSION=${TAG} -t 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG} .
+          docker push 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}

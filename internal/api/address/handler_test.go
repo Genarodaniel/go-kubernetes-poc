@@ -1,9 +1,9 @@
 package address_test
 
 import (
-	"address-crud-1/internal/api/address"
-	"address-crud-1/internal/api/service/viacep"
 	"errors"
+	"go-kubernetes-poc/internal/api/address"
+	"go-kubernetes-poc/internal/api/service/viacep"
 	"io"
 	"net/http"
 	"net/http/httptest"

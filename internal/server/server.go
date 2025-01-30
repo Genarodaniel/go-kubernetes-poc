@@ -1,7 +1,7 @@
 package server
 
 import (
-	"address-crud-1/internal/api"
+	"go-kubernetes-poc/internal/api"
 
 	"github.com/gin-gonic/gin"
 )

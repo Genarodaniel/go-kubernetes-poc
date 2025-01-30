@@ -1,4 +1,4 @@
-module address-crud-1
+module go-kubernetes-poc
 
 go 1.23.4
 
