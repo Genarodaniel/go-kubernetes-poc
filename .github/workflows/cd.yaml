@@ -88,11 +88,14 @@ jobs:
           docker build --build-arg BUILD_VERSION=${TAG} -t 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG} .
           docker push 536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
 
-      - name: Set up kubectl
-        uses: codyrobbins/setup-k8s@v1.2.0
-        with:
-          version: latest
-
-      - name: Update Kubernetes deployment
+      - name: Generate kubeconfig and Deploy to EKS using kubectl
         run: |
-          kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
+          {
+              echo 'EKS_CREDS<<EOF'
+              aws eks --region us-east-1 update-kubeconfig --name go-kubernetes-poc-eks --dry-run | base64
+              echo EOF
+          } >> $GITHUB_ENV
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ env.EKS_CREDS }}
+      - run: kubectl set image deployment/server server=536697241595.dkr.ecr.us-east-1.amazonaws.com/danielsgenaro/go-kubernetes-poc:${TAG}
