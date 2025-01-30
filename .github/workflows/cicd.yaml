@@ -85,7 +85,7 @@ jobs:
         run: |
           TAG=${{ github.ref_name }}
           echo "Building image with tag ${TAG}"
-          docker build --build-arg BUILD_VERSION=${TAG} -t ${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}:${TAG} .
+          docker build --build-arg BUILD_VERSION=${TAG} -t ${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}} .
           docker push ${{ vars.IMAGE_REGISTRY }}/${{ vars.IMAGE_NAME }}:${TAG}:${TAG}
 
       - name: Generate kubeconfig and Deploy to EKS using kubectl
